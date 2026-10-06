@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <description>This will update the cancel value to True.</description>
+        <name>Cancel_Booking</name>
+        <label>Cancel Booking</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Get_Booking.Is_Canceled__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Cancel_Booking_2</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>The Output Message for canceling the booking.</description>
+        <name>Cancel_Output_Message</name>
+        <label>Cancel Output Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Output_Message</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>This booking has been successfully cancelled.</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Cancelled_Booking_Record</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Contains the cancelled booking record.</description>
+        <name>Cancelled_Booking_Record</name>
+        <label>Cancelled Booking Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Updated_Booking_Record</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Cancelled_Booking_Record</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>The Output Message for updating the number of guests.</description>
+        <name>Guests_Output_Message</name>
+        <label>Guests Output Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Output_Message</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>The number of guests for this booking has been updated.</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Updated_Booking_Record</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Output message if nothing was updated.</description>
+        <name>Output_Message_2</name>
+        <label>Output Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Output_Message</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>There were no updates made to this booking.</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>This updates the numbers of Guests.</description>
+        <name>Update_Number_of_Guests_2</name>
+        <label>Update Number of Guests</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Get_Booking.Number_of_Guests__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Num_of_Guests</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Number_of_Guests_3</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Contains the updated booking record.</description>
+        <name>Updated_Booking_Record2</name>
+        <label>Updated Booking Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Updated_Booking_Record</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Updated_Booking_Record</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <description>Checks if the booking needs to be cancelled.</description>
+        <name>Cancel</name>
+        <label>Cancel?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Update_Number_of_Guests</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Do Not Cancel</defaultConnectorLabel>
+        <rules>
+            <name>Cancel_2</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Is_Cancelled</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Cancel_Booking</targetReference>
+            </connector>
+            <label>Cancel</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Checks if the number of guests needs to be updated.</description>
+        <name>Update_Number_of_Guests</name>
+        <label>Update Number of Guests?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Output_Message_2</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Num_of_Guests</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Number_of_Guests_2</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>This updates the booking record of an experience session for a contact.</description>
+    <environments>Default</environments>
+    <interviewLabel>Update Booking {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update Booking</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Gets the booking that needs to be updated.</description>
+        <name>Get_Booking</name>
+        <label>Get Booking</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Cancel</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Booking_Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Booking__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Grabs the cancelled booking record.</description>
+        <name>Get_Cancelled_Booking_Record</name>
+        <label>Get Cancelled Booking Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Cancelled_Booking_Record</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Booking.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Booking__c</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Experience_Name__c</queriedFields>
+        <queriedFields>Date__c</queriedFields>
+        <queriedFields>Start_Time__c</queriedFields>
+        <queriedFields>Number_of_Guests__c</queriedFields>
+        <queriedFields>Status__c</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Grabs the updated booking record.</description>
+        <name>Get_Updated_Booking_Record</name>
+        <label>Get Updated Booking Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Updated_Booking_Record2</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Booking.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Booking__c</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Experience_Name__c</queriedFields>
+        <queriedFields>Date__c</queriedFields>
+        <queriedFields>Start_Time__c</queriedFields>
+        <queriedFields>Number_of_Guests__c</queriedFields>
+        <queriedFields>Status__c</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <description>This updates the record to cancel the booking.</description>
+        <name>Cancel_Booking_2</name>
+        <label>Cancel Booking</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Cancel_Output_Message</targetReference>
+        </connector>
+        <inputReference>Get_Booking</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <description>This updates the number of guests.</description>
+        <name>Update_Number_of_Guests_3</name>
+        <label>Update Number of Guests</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Guests_Output_Message</targetReference>
+        </connector>
+        <inputReference>Get_Booking</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Booking</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>This is the booking id that needs to be modified.</description>
+        <name>Booking_Id</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Tracks if the booking needs to be cancelled.</description>
+        <name>Is_Cancelled</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>Num_of_Guests</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>Output_Message</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>This contains the updated booking record to display to the user.</description>
+        <name>Updated_Booking_Record</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Booking__c</objectType>
+    </variables>
+</Flow>

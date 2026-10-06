@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <customProperties>
+        <name>ScreenProgressIndicator</name>
+        <value>
+            <stringValue>{&quot;location&quot;:&quot;top&quot;,&quot;type&quot;:&quot;simple&quot;}</stringValue>
+        </value>
+    </customProperties>
+    <description>This runs the update dates for Trick or Trailhead flow and is used as a login flow.</description>
+    <environments>Default</environments>
+    <interviewLabel>Run Update Dates for Trick or Trailhead {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Run Update Dates for Trick or Trailhead</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_Dates_for_Trick_or_Trailhead</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <description>This runs the update dates for Trick or Trailhead flow.</description>
+        <name>Update_Dates_for_Trick_or_Trailhead</name>
+        <label>Update Dates for Trick or Trailhead</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <flowName>Update_Dates_for_Trick_or_Trailhead</flowName>
+    </subflows>
+</Flow>

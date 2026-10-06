@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <description>This assigns the creation failed message.</description>
+        <name>Assign_Creation_Failed_Message</name>
+        <label>Assign Creation Failed Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>output_Fail</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Unfortunately, the reservation could not be created.</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>Assigns the creation was successful message.</description>
+        <name>Assign_Creation_Successful_Message</name>
+        <label>Assign Creation Successful Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>output_Success</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>The reservation was successfully created.</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <description>This creates a new reservation.</description>
+    <environments>Default</environments>
+    <interviewLabel>Create a Reservation {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Create a Reservation</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <description>This will add a new reservation.</description>
+        <name>Add_Reservation</name>
+        <label>Add Reservation</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Assign_Creation_Successful_Message</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Assign_Creation_Failed_Message</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>Check_in_Date__c</field>
+            <value>
+                <elementReference>Check_In_Date</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Check_out_Date__c</field>
+            <value>
+                <elementReference>Check_Out_Date</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Contact__c</field>
+            <value>
+                <elementReference>Contact_Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Number_of_Guests__c</field>
+            <value>
+                <elementReference>Num_of_Guests</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Room_Type__c</field>
+            <value>
+                <elementReference>Room_Type</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Room__c</field>
+            <value>
+                <elementReference>Get_Room_Record_for_Room_Name.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Reservation__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <description>This grabs the room record for the room number provided.</description>
+        <name>Get_Room_Record_for_Room_Name</name>
+        <label>Get Room Record for Room Name</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Add_Reservation</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Room_Name</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Room__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Room_Record_for_Room_Name</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>This is the check-in date for the reservation.</description>
+        <name>Check_In_Date</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is the check-out date for the reservation.</description>
+        <name>Check_Out_Date</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is the contact id of the person making the reservation.</description>
+        <name>Contact_Id</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>The number of people staying for this reservation.</description>
+        <name>Num_of_Guests</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <description>This message appears when adding the new reservation fails.</description>
+        <name>output_Fail</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>This message displays when the new reservation was created.</description>
+        <name>output_Success</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>This is the name of the room including the number that is available.</description>
+        <name>Room_Name</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>The type of room the person making the reservation would like.</description>
+        <name>Room_Type</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is the status of the reservation.</description>
+        <name>Status</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

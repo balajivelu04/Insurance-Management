@@ -1,0 +1,652 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <description>Cancel each booking.</description>
+        <name>Cancel_Booking</name>
+        <label>Cancel Booking</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Cancel_each_Booking.Is_Canceled__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Cancel_Bookings</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>The Output Message for canceling the booking.</description>
+        <name>Cancel_Output_Message</name>
+        <label>Cancel Output Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Output_Message</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>This session has been successfully cancelled.</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Updated_Record</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This will update the cancel value to True.</description>
+        <name>Cancel_Session</name>
+        <label>Cancel Session</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Get_Session.Is_Canceled__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Cancel_Session2</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>The Output Message for updating the date of the session.</description>
+        <name>Date_Output_Message</name>
+        <label>Date Output Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Output_Message_Date</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>The date of this session has been updated.</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Time2</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Makes the updated record available for output.</description>
+        <name>Output_Updated_Record</name>
+        <label>Output Updated Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Updated_Session_Record</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Updated_Record</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>This sets the session id from the booking record.</description>
+        <name>Set_the_Session_ID</name>
+        <label>Set the Session ID</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Session_Id</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Booking_Record.Session__r.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Session</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>The Output Message for the time being updated.</description>
+        <name>Time_Output_Message</name>
+        <label>Time Output Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Output_Message_Time</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>The time of the session has been updated.</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_Updated_Record</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Update each booking.</description>
+        <name>Update_Booking2</name>
+        <label>Update Booking</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Update_Date_each_Booking.Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Date</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Bookings2</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Update each booking.</description>
+        <name>Update_Booking3</name>
+        <label>Update Booking</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Update_Time_each_Booking.Start_Time__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Update_Time</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Bookings4</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This updates the event of the session.</description>
+        <name>Update_Date2</name>
+        <label>Update Date</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Get_Session.Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>New_Date</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Date3</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This updates the time of the session.</description>
+        <name>Update_Time3</name>
+        <label>Update Time</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Get_Session.Start_Time__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Update_Time</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Time4</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <description>Checks if the experience session needs to be cancelled.</description>
+        <name>Cancel</name>
+        <label>Cancel?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Update_Date</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Do Not Cancel</defaultConnectorLabel>
+        <rules>
+            <name>Cancel2</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Is_Cancelled</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Cancel_Session</targetReference>
+            </connector>
+            <label>Cancel</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Checks to see if Booking Id is present.</description>
+        <name>Check_for_Booking_Id</name>
+        <label>Check for Booking Id</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Session</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes0</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Booking_ID</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Booking_Record</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Checks if the date of the session needs to be updated</description>
+        <name>Update_Date</name>
+        <label>Update Date?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Update_Time2</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>New_Date</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>New_Date</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>Get_Session.Date__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Date2</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Checks if the time needs to be updated.</description>
+        <name>Update_Time2</name>
+        <label>Update Time?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Updated_Record</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes3</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Update_Time</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Time3</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>This is to cancel experience sessions, update the date of a session, or change the time of the session.</description>
+    <environments>Default</environments>
+    <interviewLabel>Update Experience Sessions {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update Experience Sessions</label>
+    <loops>
+        <description>Cancel each booking.</description>
+        <name>Cancel_each_Booking</name>
+        <label>Cancel each Booking</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Get_Bookings_Tied_to_Session</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Cancel_Booking</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Cancel_Output_Message</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <description>Update the date of each booking.</description>
+        <name>Update_Date_each_Booking</name>
+        <label>Update Date each Booking</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Get_Bookings_Tied_to_Session2</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Update_Booking2</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Date_Output_Message</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <description>Update the date of each booking.</description>
+        <name>Update_Time_each_Booking</name>
+        <label>Update Time each Booking</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Get_Bookings_Tied_to_Session2</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Update_Booking3</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Time_Output_Message</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Grabs the booking record based on the ID</description>
+        <name>Get_Booking_Record</name>
+        <label>Get Booking Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Set_the_Session_ID</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Booking_ID</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Booking__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Get the bookings tied to the session.</description>
+        <name>Get_Bookings_Tied_to_Session</name>
+        <label>Get Bookings Tied to Session</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Cancel_each_Booking</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Session__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Session_Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Booking__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Get the bookings tied to the session.</description>
+        <name>Get_Bookings_Tied_to_Session2</name>
+        <label>Get Bookings Tied to Session</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_Date_each_Booking</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Session__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Session_Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Booking__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Get the bookings tied to the session.</description>
+        <name>Get_Bookings_Tied_to_Session3</name>
+        <label>Get Bookings Tied to Session</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_Time_each_Booking</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Session__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Session_Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Booking__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Gets the session that needs to be updated.</description>
+        <name>Get_Session</name>
+        <label>Get Session</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Cancel</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Session_Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Session__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Gets the updated experience session record.</description>
+        <name>Get_Updated_Record</name>
+        <label>Get Updated Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Output_Updated_Record</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Session.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Session__c</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Experience_Name__c</queriedFields>
+        <queriedFields>Date__c</queriedFields>
+        <queriedFields>Start_Time__c</queriedFields>
+        <queriedFields>End_Time__c</queriedFields>
+        <queriedFields>Status__c</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <description>Cancels the bookings tied to the session.</description>
+        <name>Cancel_Bookings</name>
+        <label>Cancel Bookings</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Cancel_each_Booking</targetReference>
+        </connector>
+        <inputReference>Cancel_each_Booking</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <description>This updates the record to cancel the session.</description>
+        <name>Cancel_Session2</name>
+        <label>Cancel Session</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Bookings_Tied_to_Session</targetReference>
+        </connector>
+        <inputReference>Get_Session</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <description>Updates the bookings tied to the session.</description>
+        <name>Update_Bookings2</name>
+        <label>Update Bookings</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_Date_each_Booking</targetReference>
+        </connector>
+        <inputReference>Update_Date_each_Booking</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <description>Updates the bookings tied to the session.</description>
+        <name>Update_Bookings4</name>
+        <label>Update Bookings</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_Time_each_Booking</targetReference>
+        </connector>
+        <inputReference>Update_Time_each_Booking</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <description>This updates the date of the session.</description>
+        <name>Update_Date3</name>
+        <label>Update Date</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Bookings_Tied_to_Session2</targetReference>
+        </connector>
+        <inputReference>Get_Session</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <description>This will update the time of the session.</description>
+        <name>Update_Time4</name>
+        <label>Update Time</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Bookings_Tied_to_Session3</targetReference>
+        </connector>
+        <inputReference>Get_Session</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_for_Booking_Id</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>This grabs the booking id should you be looking at a booking vs the session.</description>
+        <name>Booking_ID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Tracks if the booking needs to be cancelled.</description>
+        <name>Is_Cancelled</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>The new date of the event session.</description>
+        <name>New_Date</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>The Output Message for canceling the booking.</description>
+        <name>Output_Message</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>The output message to be used if the date is updated.</description>
+        <name>Output_Message_Date</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>The output message to be used if the time of the session is updated.</description>
+        <name>Output_Message_Time</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>Record ID of the session to be modified.</description>
+        <name>Session_Id</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Updates the time of the session.</description>
+        <name>Update_Time</name>
+        <dataType>Time</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>Updated_Session_Record</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Session__c</objectType>
+    </variables>
+</Flow>

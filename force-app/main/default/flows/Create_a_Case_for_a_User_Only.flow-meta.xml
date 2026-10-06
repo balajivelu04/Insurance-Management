@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <description>This assigns the newly created case to the output variable.</description>
+        <name>Assign_New_Case_to_Output</name>
+        <label>Assign New Case to Output</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Output_NewCase</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Records_2</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>This assigns the newly created case to the output variable.</description>
+        <name>Assign_New_Case_to_Output2</name>
+        <label>Assign New Case to Output</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Output_NewCase</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Newly_Created_Case</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>Assigns the new owner id.</description>
+        <name>Assign_New_Owner_ID</name>
+        <label>Assign New Owner ID</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Get_Newly_Created_Case.OwnerId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Grab_User_Record.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_with_New_Owner</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <description>Checks if the OwnerID field is empty.</description>
+        <name>Is_Owner_Empty</name>
+        <label>Is Owner Empty?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Assign_New_Case_to_Output2</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Empty</defaultConnectorLabel>
+        <rules>
+            <name>Not_Empty</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>OwnerName</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Grab_User_Record</targetReference>
+            </connector>
+            <label>Not Empty</label>
+        </rules>
+    </decisions>
+    <description>This creates a case for a user but does not assign a contact or an account. If the user isn&apos;t pre-determined it will default to the person who is logged in. This is to be used only when creating a case for a user.</description>
+    <environments>Default</environments>
+    <interviewLabel>Create a Case for a User {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Create a Case for a User Only</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <description>This will create the new case.</description>
+        <name>Create_New_Case</name>
+        <label>Create New Case</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Newly_Created_Case</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <elementReference>Description</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Origin</field>
+            <value>
+                <elementReference>CaseOrigin</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$User.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>SubjectLine</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <description>This grabs the newly created case.</description>
+        <name>Get_Newly_Created_Case</name>
+        <label>Get Newly Created Case</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Is_Owner_Empty</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Create_New_Case</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Case</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>OwnerId</queriedFields>
+        <queriedFields>Subject</queriedFields>
+        <queriedFields>Description</queriedFields>
+        <queriedFields>Origin</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <name>Get_Records_2</name>
+        <label>Get Records 2</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_New_Case_to_Output</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Newly_Created_Case.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Case</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>OwnerId</queriedFields>
+        <queriedFields>Subject</queriedFields>
+        <queriedFields>Description</queriedFields>
+        <queriedFields>Origin</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Grabs the user id of the person we are reassigning the case to.</description>
+        <name>Grab_User_Record</name>
+        <label>Grab User Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_New_Owner_ID</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>OwnerName</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>User</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <description>Updates the User Record with the New Owner.</description>
+        <name>Update_with_New_Owner</name>
+        <label>Update with New Owner</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Records_2</targetReference>
+        </connector>
+        <inputReference>Get_Newly_Created_Case</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Create_New_Case</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>This will pull in where the case originated from.</description>
+        <name>CaseOrigin</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is to provide additional information regarding the case.</description>
+        <name>Description</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>Output_NewCase</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Case</objectType>
+    </variables>
+    <variables>
+        <description>This reflects who should own this case.</description>
+        <name>OwnerName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is the subject line of the case and will capture the general summary of what is needed.</description>
+        <name>SubjectLine</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

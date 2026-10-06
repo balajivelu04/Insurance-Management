@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <description>Assign all rooms matching the type to All_Available_Rooms as a starting point. The booked rooms will be removed at the end.</description>
+        <name>Assign_Available_Rooms</name>
+        <label>Assign Available Rooms</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>All_Available_Rooms</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Rooms_Based_on_Reservation_Room_Type</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Set_Starting_Values</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Assign all rooms matching the type to All_Available_Rooms as a starting point. The booked rooms will be removed at the end.</description>
+        <name>Assign_Available_Rooms_2</name>
+        <label>Assign Available Rooms</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>All_Available_Rooms</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Get_Rooms_Based_on_Room_Type</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Set_Starting_Values</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Sets the starting values of the count variables to zero. This ensures the formula used at the end of the flow works without issue.</description>
+        <name>Set_Starting_Values</name>
+        <label>Set Starting Values</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Count_of_All_Rooms</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Count_of_Available_Rooms</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Count_of_Booked_Rooms</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <numberValue>0.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Through_All_Rooms</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Updates the count of all rooms and add room record to All_Rooms collection variable.</description>
+        <name>Update_Count_of_All_Rooms</name>
+        <label>Update Count of All Rooms</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Count_of_All_Rooms</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>All_Rooms</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Through_All_Rooms</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_All_Reservations</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This updates the count of the booked rooms and adds the Room Number to the Booked_Room_Number collection variable.</description>
+        <name>Update_Count_of_Booked_Rooms</name>
+        <label>Update Count of Booked Rooms</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Count_of_Booked_Rooms</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Booked_Room_Number</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Through_All_Reservations.Room_Number__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Booked_Rooms_Collection</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Loop_Through_All_Rooms</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Through_All_Reservations</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This updates the number of available rooms.</description>
+        <name>Update_Number_of_Available_Rooms</name>
+        <label>Update Number of Available Rooms</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Count_of_Available_Rooms</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Num_of_Available_Rooms</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>All_Available_Rooms</assignToReference>
+            <operator>RemoveAll</operator>
+            <value>
+                <elementReference>Booked_Rooms_Collection</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <description>Checks whether the request is an existing reservation or a new one.</description>
+        <name>Existing_Reservation_or_New_Reservation</name>
+        <label>Existing Reservation or New Reservation?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Get_Rooms_Based_on_Room_Type</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>New</defaultConnectorLabel>
+        <rules>
+            <name>Existing</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Reservation_Record_Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Reservation_Record</targetReference>
+            </connector>
+            <label>Existing</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This will check if the room is already booked or not.</description>
+        <name>Is_the_Room_Booked</name>
+        <label>Is the Room Booked?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Loop_Through_All_Reservations</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Room Not Booked</defaultConnectorLabel>
+        <rules>
+            <name>Room_Booked</name>
+            <conditionLogic>(1 AND 2) OR (3 AND 4 AND 5 AND 6)</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Reservation_Record.Check_in_Date__c</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <elementReference>Loop_Through_All_Reservations.Check_out_Date__c</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Get_Reservation_Record.Check_out_Date__c</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <elementReference>Loop_Through_All_Reservations.Check_in_Date__c</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Check_in_Date</leftValueReference>
+                <operator>LessThan</operator>
+                <rightValue>
+                    <elementReference>Loop_Through_All_Reservations.Check_out_Date__c</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Check_out_date</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <elementReference>Loop_Through_All_Reservations.Check_in_Date__c</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Check_in_Date</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Check_out_date</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Count_of_Booked_Rooms</targetReference>
+            </connector>
+            <label>Room Booked</label>
+        </rules>
+    </decisions>
+    <description>This is used when finding all of the available rooms based on room type.</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>This shows the count of the available rooms.</description>
+        <name>Num_of_Available_Rooms</name>
+        <dataType>Number</dataType>
+        <expression>{!Count_of_All_Rooms} - {!Count_of_Booked_Rooms}</expression>
+        <scale>0</scale>
+    </formulas>
+    <interviewLabel>Available Rooms based on Existing Reservation Room Type {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Available Rooms based on Room Type</label>
+    <loops>
+        <description>This is to loop through and check if there are existing reservations for the room, thus blocking its availability.</description>
+        <name>Loop_Through_All_Reservations</name>
+        <label>Loop Through All Reservations</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Get_All_Reservations</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Is_the_Room_Booked</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Loop_Through_All_Rooms</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <description>Loop Through rooms to count booked rooms and non-booked rooms.</description>
+        <name>Loop_Through_All_Rooms</name>
+        <label>Loop Through All Rooms</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>All_Available_Rooms</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Update_Count_of_All_Rooms</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Update_Number_of_Available_Rooms</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>This grabs all the reservations tied to this room, except if it is tied to the existing reservation.</description>
+        <name>Get_All_Reservations</name>
+        <label>Get All Reservations</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_Through_All_Reservations</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Room_Number__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Loop_Through_All_Rooms.Name</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Id</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <elementReference>Get_Reservation_Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Reservation__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>This is to get the record of the reservation in question.</description>
+        <name>Get_Reservation_Record</name>
+        <label>Get Reservation Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Get_Rooms_Based_on_Reservation_Room_Type</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Reservation_Record_Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Reservation__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>This pulls a list of rooms based on record type.</description>
+        <name>Get_Rooms_Based_on_Reservation_Room_Type</name>
+        <label>Get Rooms Based on Reservation Room Type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Available_Rooms</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Type__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Get_Reservation_Record.Room_Type__c</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Name</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <elementReference>Get_Reservation_Record.Room_Number__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Room__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>This pulls a list of rooms based on record type.</description>
+        <name>Get_Rooms_Based_on_Room_Type</name>
+        <label>Get Rooms Based on Room Type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Available_Rooms_2</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Type__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Room_Type</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>Room__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Existing_Reservation_or_New_Reservation</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>All available rooms that match the type of room already booked.</description>
+        <name>All_Available_Rooms</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Room__c</objectType>
+    </variables>
+    <variables>
+        <description>All rooms that match the type of room already booked.</description>
+        <name>All_Rooms</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Room__c</objectType>
+    </variables>
+    <variables>
+        <description>Tracks the Room Numbers that have already been booked.</description>
+        <name>Booked_Room_Number</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>A collection of booked rooms.</description>
+        <name>Booked_Rooms_Collection</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Room__c</objectType>
+    </variables>
+    <variables>
+        <description>This is to check based on a check in date.</description>
+        <name>Check_in_Date</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is to check based on a check out date.</description>
+        <name>Check_out_date</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>The count of all rooms regardless of whether the room is booked or not.</description>
+        <name>Count_of_All_Rooms</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <description>This counts the number of Available Rooms.</description>
+        <name>Count_of_Available_Rooms</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <description>This tracks the count of booked rooms.</description>
+        <name>Count_of_Booked_Rooms</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>currentItemFromSourceCollection</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Room__c</objectType>
+    </variables>
+    <variables>
+        <description>This is the reservation where we want to inquire about different rooms.</description>
+        <name>Reservation_Record_Id</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is the room type being inquired about.</description>
+        <name>Room_Type</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

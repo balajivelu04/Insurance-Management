@@ -1,0 +1,645 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <description>There were no updates made to the reservation.</description>
+        <name>Output_No_Updates</name>
+        <label>Output_No_Updates</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Output_Message</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>There were no updates made to the reservation record.</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>The success message if the reservation record was updated.</description>
+        <name>Output_Update</name>
+        <label>Output_Update</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Output_Message</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>The reservation record was successfully updated.</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>Updates the check-in date.</description>
+        <name>Update_Check_in_Date_1</name>
+        <label>Update Check-in Date</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Get_Reservation.Check_in_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Check_in_Date</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Check_out_Date</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This updates the check-out date.</description>
+        <name>Update_Check_out_Date_2</name>
+        <label>Update Check-out Date</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Get_Reservation.Check_out_Date__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Check_out_Date</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Number_of_Guests</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This is to update the nightly rate.</description>
+        <name>Update_Nightly_Rate_2</name>
+        <label>Update Nightly Rate</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Get_Reservation.Nightly_Rate__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>NightlyRate</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Status</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This adds notes to the existing notes.</description>
+        <name>Update_Notes_2</name>
+        <label>Update Notes</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Get_Reservation.Notes__c</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>Notes</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Reservation_Record_Changes</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This updates the number of guests.</description>
+        <name>Update_Number_of_Guests_2</name>
+        <label>Update Number of Guests</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Get_Reservation.Number_of_Guests__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Number_of_Guests</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Room_Type</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This is to update the room assigned.</description>
+        <name>Update_Room_2</name>
+        <label>Update Room</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Get_Reservation.Room__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Room_Record_Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Nightly_Rate</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This is to update room type.</description>
+        <name>Update_Room_Type_2</name>
+        <label>Update Room Type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Get_Reservation.Room_Type__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Room_Type</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Room</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>This updates the status of the reservation.</description>
+        <name>Update_Status_2</name>
+        <label>Update Status</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Get_Reservation.Status__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Status</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Update_Notes</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <description>This is to update the reservation record if something was updated.</description>
+        <name>Reservation_Record_Changes</name>
+        <label>Reservation Record Changes?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Output_No_Updates</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_9</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Yes</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Yes_2</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Yes_6</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Yes_3</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Yes_5</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Yes_4</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Yes_7</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Yes_8</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Reservation_Record</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This is to determine if the Check-in date should be updated.</description>
+        <name>Update_Check_in_Date</name>
+        <label>Update Check-in Date?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Update_Check_out_Date</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Check_in_Date</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Check_in_Date</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>Get_Reservation.Check_in_Date__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Check_in_Date_1</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This is to determine if the Check-out date should be updated.</description>
+        <name>Update_Check_out_Date</name>
+        <label>Update Check-out Date?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Update_Number_of_Guests</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_2</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Check_out_Date</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Check_out_Date</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>Get_Reservation.Check_out_Date__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Check_out_Date_2</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This is to determine if the nightly rate should be updated.</description>
+        <name>Update_Nightly_Rate</name>
+        <label>Update Nightly Rate?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Update_Status</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_6</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>NightlyRate</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>NightlyRate</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>Get_Reservation.Nightly_Rate__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Nightly_Rate_2</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This is to determine if notes need to be added.</description>
+        <name>Update_Notes</name>
+        <label>Update Notes?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Reservation_Record_Changes</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_8</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Notes</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Notes_2</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This is to determine if the number of guests should be updated.</description>
+        <name>Update_Number_of_Guests</name>
+        <label>Update Number of Guests?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Update_Room_Type</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_3</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Number_of_Guests</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Number_of_Guests</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>Get_Reservation.Number_of_Guests__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Number_of_Guests_2</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This is to determine if the room should be updated.</description>
+        <name>Update_Room</name>
+        <label>Update Room?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Update_Nightly_Rate</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_5</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Room_Record_Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Room_Record_Id</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>Get_Reservation.Id</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Room_2</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This is to determine if the room type should be updated.</description>
+        <name>Update_Room_Type</name>
+        <label>Update Room Type?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Update_Room</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_4</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Room_Type</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Room_Type</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>Get_Reservation.Room_Type__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Room_Type_2</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>This is to determine if the status needs to be updated.</description>
+        <name>Update_Status</name>
+        <label>Update Status?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Update_Notes</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_7</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Status</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Status</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>Get_Reservation.Status__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Status_2</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>This is to be used when updating a reservation record.</description>
+    <environments>Default</environments>
+    <interviewLabel>Update Reservation {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update Reservation</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Reservation</name>
+        <label>Get Reservation</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Update_Check_in_Date</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Reservation_Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Reservation__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <description>This updates the reservation record.</description>
+        <name>Update_Reservation_Record</name>
+        <label>Update Reservation Record</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Output_Update</targetReference>
+        </connector>
+        <inputReference>Get_Reservation</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Reservation</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>This is to update the Check_in_Date.</description>
+        <name>Check_in_Date</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is to update the Check_out_Date.</description>
+        <name>Check_out_Date</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is to update the nightly rate.</description>
+        <name>NightlyRate</name>
+        <dataType>Currency</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <scale>2</scale>
+    </variables>
+    <variables>
+        <description>This is to add notes to the updated reservation.</description>
+        <name>Notes</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is to update the Number of Guests.</description>
+        <name>Number_of_Guests</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is the output message.</description>
+        <name>Output_Message</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>This is the reservation id that is going to be updated.</description>
+        <name>Reservation_Id</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is to update the room that is selected.</description>
+        <name>Room_Record_Id</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is to update the the Room Type.</description>
+        <name>Room_Type</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>This is to update the Status of the Room.</description>
+        <name>Status</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>
